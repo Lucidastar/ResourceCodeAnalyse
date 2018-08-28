@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lucidastar.analyse.event.UserEvent;
+import com.lucidastar.analyse.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         mButtonAsync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: =========================================");
+//                Log.i(TAG, "onClick: =========================================");
+                Logger.i("点击了了  了");
                 new Thread(){
                     @Override
                     public void run() {
@@ -67,34 +69,34 @@ public class MainActivity extends AppCompatActivity {
     //主线程
     @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void getUserInfoMain(UserEvent userEvent) {
-        Log.i(TAG, "getUserInfoMain: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
+//        Log.i(TAG, "getUserInfoMain: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
         mTvTest.setText("名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge());
     }
     //异步
     @Subscribe(threadMode = ThreadMode.ASYNC)
     public void getUserInfoAsync(UserEvent userEvent) {
-        Log.i(TAG, "getUserInfoAsync: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
+//        Log.i(TAG, "getUserInfoAsync: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
 
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void getUserInfoBackground(UserEvent userEvent) {
-        Log.i(TAG, "getUserInfoBackground: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
+//        Log.i(TAG, "getUserInfoBackground: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void getUserInfoMainOrdered(UserEvent userEvent) {
 
-        Log.i(TAG, "getUserInfoMainOrdered: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
+//        Log.i(TAG, "getUserInfoMainOrdered: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
     }
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void getUserInfoPosting(UserEvent userEvent) {
-        Log.i(TAG, "getUserInfoPosting: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
+//        Log.i(TAG, "getUserInfoPosting: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
     }
 }

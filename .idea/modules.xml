@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/EventBusStudy/app.iml" filepath="$PROJECT_DIR$/EventBusStudy/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EventBusStudy/EventBusStudy.iml" filepath="$PROJECT_DIR$/EventBusStudy/EventBusStudy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Glidestudy/Glidestudy.iml" filepath="$PROJECT_DIR$/Glidestudy/Glidestudy.iml" />
       <module fileurl="file://$PROJECT_DIR$/ResourceCodeAnalyse.iml" filepath="$PROJECT_DIR$/ResourceCodeAnalyse.iml" />
+      <module fileurl="file://G:\MrHanWork\uploadGit\ResourceCodeAnalyse\EventBusStudy\app.iml" filepath="G:\MrHanWork\uploadGit\ResourceCodeAnalyse\EventBusStudy\app.iml" />
     </modules>
   </component>
 </project>
