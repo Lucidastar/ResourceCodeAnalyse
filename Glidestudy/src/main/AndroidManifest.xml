@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.lucidastar.glidestudy.utils.LoaderModel"
+        <meta-data android:name="com.lucidastar.glidestudy.glideload.LoaderModel"
             android:value="AppGlideModule"
             />
     </application>

@@ -1,4 +1,4 @@
-package com.lucidastar.glidestudy.utils;
+package com.lucidastar.glidestudy.glideload;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
