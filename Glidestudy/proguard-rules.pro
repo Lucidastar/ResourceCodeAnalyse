@@ -29,4 +29,4 @@
 # 如果你使用 DexGuard 你可能还需要添加：
 -dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 # for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule

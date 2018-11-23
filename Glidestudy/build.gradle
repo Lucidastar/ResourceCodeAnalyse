@@ -2,9 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-
-
-
     defaultConfig {
         applicationId "com.lucidastar.glidestudy"
         minSdkVersion 15
@@ -55,9 +52,11 @@ dependencies {
         exclude group: "com.android.support"
     }
     implementation "com.android.support:support-fragment:26.1.0"
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+//    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
-//    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+//    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+//    implementation "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.github.Lucidastar:AndroidCommUtils:v1.0'
 }
