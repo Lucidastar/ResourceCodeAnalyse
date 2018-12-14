@@ -1,3 +1,4 @@
+/*
 package com.lucidastar.glidestudy.glideload;
 
 import android.content.Context;
@@ -15,9 +16,11 @@ import java.io.InputStream;
 
 import okhttp3.OkHttpClient;
 
+*/
 /**
  * Created by qiuyouzone on 2018/8/29.
- */
+ *//*
+
 
 @GlideModule
 public class LoaderModel extends AppGlideModule{
@@ -41,3 +44,4 @@ public class LoaderModel extends AppGlideModule{
 
     }
 }
+*/

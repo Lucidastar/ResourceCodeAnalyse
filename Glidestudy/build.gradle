@@ -19,7 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'typedefs.txt'
+    }
     tasks.whenTaskAdded { task ->
         if (task.name.contains("lint")
                 || task.name.equals("clean")
@@ -45,18 +53,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-//    implementation 'com.github.bumptech.glide:glide:4.8.0'
-//    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-
-    implementation ("com.github.bumptech.glide:glide:4.7.1") {
-        exclude group: "com.android.support"
-    }
-    implementation "com.android.support:support-fragment:26.1.0"
-//    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
-
-//    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-//    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-//    implementation "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+//    implementation "com.android.support:support-fragment:26.1.0"
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.github.Lucidastar:AndroidCommUtils:v1.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:annotations:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+//    api "com.github.bumptech.glide:okhttp3-integration:4.8.0"
 }

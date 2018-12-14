@@ -23,6 +23,10 @@
         <!--<meta-data android:name="com.lucidastar.glidestudy.glideload.LoaderModel"
             android:value="AppGlideModule"
             />-->
+        <meta-data
+            android:name="com.lucidastar.glidestudy.progress.ProgressAppGlideModule"
+            android:value="AppGlideModule" />
+
     </application>
 
 </manifest>
