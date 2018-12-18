@@ -34,8 +34,7 @@ public class ProgressManager {
                             .body(new ProgressResponseBody(request.url().toString(), LISTENER, response.body()))
                             .build();
                 }
-            })
-                    .build();
+            }).build();
         }
         return okHttpClient;
     }

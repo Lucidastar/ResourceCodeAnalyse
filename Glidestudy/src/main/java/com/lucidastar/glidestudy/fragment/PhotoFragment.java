@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.lucidastar.glidestudy.GlideImageLoader;
+import com.lucidastar.glidestudy.GlideImageView;
 import com.lucidastar.glidestudy.R;
 import com.lucidastar.glidestudy.progress.OnProgressListener;
 import com.lucidastar.glidestudy.progress.ProgressManager;
@@ -26,6 +29,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
 
     private String mPhotoUrl;
     private ImageView mIvTest;
+    private GlideImageView mGlideImageView;
     private int mPosition;
     public PhotoFragment() {
 
@@ -69,6 +73,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     @Override
     protected void initView(View rootView) {
         mIvTest = rootView.findViewById(R.id.iv_test);
+        mGlideImageView = rootView.findViewById(R.id.giv_test);
     }
 
     @Override
@@ -87,12 +92,22 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
-        Glide.with(this).load(mPhotoUrl).into(mIvTest);
-        ProgressManager.addListener(mPhotoUrl, new OnProgressListener() {
+//        Glide.with(this).load(mPhotoUrl).into(mIvTest);
+
+
+//        GlideImageLoader.create(mIvTest).listener(mPhotoUrl, new OnProgressListener() {
+//            @Override
+//            public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
+//                KLog.i(getClass().getSimpleName() + percentage);
+//            }
+//        });
+
+        mGlideImageView.diskCacheStrategy(DiskCacheStrategy.NONE).load(mPhotoUrl, R.drawable.ic_launcher_background, new OnProgressListener() {
             @Override
             public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
-                KLog.i(getClass().getSimpleName() + percentage);
+                KLog.i(getClass().getSimpleName() + percentage+"===bytesRead:"+bytesRead +"==totalBytes:"+totalBytes);
             }
         });
+
     }
 }

@@ -23,9 +23,9 @@
         <!--<meta-data android:name="com.lucidastar.glidestudy.glideload.LoaderModel"
             android:value="AppGlideModule"
             />-->
-        <meta-data
+       <!-- <meta-data
             android:name="com.lucidastar.glidestudy.progress.ProgressAppGlideModule"
-            android:value="AppGlideModule" />
+            android:value="AppGlideModule" />-->
 
     </application>
 

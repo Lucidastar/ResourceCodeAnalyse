@@ -9,4 +9,9 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content" />
 
+   <com.lucidastar.glidestudy.GlideImageView
+       android:id="@+id/giv_test"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" />
+
 </FrameLayout>

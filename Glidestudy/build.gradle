@@ -1,16 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.lucidastar.glidestudy"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -27,39 +28,43 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/INDEX.LIST'
         exclude 'typedefs.txt'
+//        exclude 'META-INF/proguard/okhttp3.pro'
+        exclude "okhttp3/internal/publicsuffix/publicsuffixes.gz"
     }
-    tasks.whenTaskAdded { task ->
-        if (task.name.contains("lint")
-                || task.name.equals("clean")
-                || task.name.contains("mockableAndroidJar")
-                || task.name.contains("UnitTest")
-                || task.name.contains("AndroidTest")
-        ) {
-            task.enabled = false
-        }
-    }
+//    tasks.whenTaskAdded { task ->
+//        if (task.name.contains("lint")
+//                || task.name.equals("clean")
+//                || task.name.contains("mockableAndroidJar")
+//                || task.name.contains("UnitTest")
+//                || task.name.contains("AndroidTest")
+//        ) {
+//            task.enabled = false
+//        }
+//    }
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-
-//    implementation "com.android.support:support-fragment:26.1.0"
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+    //        exclude group: 'com.android.support', module: 'support-annotations'
+    //    })
+    //    implementation "com.android.support:support-fragment:26.1.0"
+    //    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.github.Lucidastar:AndroidCommUtils:v1.0'
-
     implementation 'com.github.bumptech.glide:glide:4.8.0'
-    implementation 'com.github.bumptech.glide:annotations:4.8.0'
+    //    implementation 'com.github.bumptech.glide:annotations:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-//    api "com.github.bumptech.glide:okhttp3-integration:4.8.0"
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.8.0') {
+//        exclude group: 'com.squareup.okio'
+//        exclude group:'com.squareup.okhttp'
+    }
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:support-v4:28.0.0'
 }
