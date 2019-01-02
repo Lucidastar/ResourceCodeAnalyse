@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.lucidastar.glidestudy.fragment.PhotoFragment;
+import com.lucidastar.glidestudy.utils.ScreenUtils;
 import com.mine.lucidastarutils.log.KLog;
 
 import java.io.IOException;
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         KLog.i("测试一下");
         try {
             InputStream icon_inset_ticket = getAssets().open("icon_insert_ticket.gif");
-            Glide.with(MainActivity.this).asGif().load("file:///android_asset/icon_insert_ticket.gif").into(mIvTest);
+//            Glide.with(MainActivity.this).asGif().load("file:///android_asset/icon_insert_ticket.gif").into(mIvTest);
+            mIvTest.setImageBitmap(ScreenUtils.snapShotWithStatusBar(this));
         } catch (IOException e) {
             e.printStackTrace();
         }

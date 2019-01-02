@@ -20,6 +20,7 @@ import com.lucidastar.glidestudy.GlideImageView;
 import com.lucidastar.glidestudy.R;
 import com.lucidastar.glidestudy.progress.OnProgressListener;
 import com.lucidastar.glidestudy.progress.ProgressManager;
+import com.lucidastar.glidestudy.view.CircleProgressView;
 import com.mine.lucidastarutils.log.KLog;
 
 /**
@@ -31,6 +32,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     private ImageView mIvTest;
     private GlideImageView mGlideImageView;
     private int mPosition;
+    private CircleProgressView mCircleProgressView;
     public PhotoFragment() {
 
     }
@@ -74,6 +76,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     protected void initView(View rootView) {
         mIvTest = rootView.findViewById(R.id.iv_test);
         mGlideImageView = rootView.findViewById(R.id.giv_test);
+        mCircleProgressView = rootView.findViewById(R.id.cpv_progress);
     }
 
     @Override
@@ -101,11 +104,15 @@ public class PhotoFragment extends LazyLoadBaseFragment {
 //                KLog.i(getClass().getSimpleName() + percentage);
 //            }
 //        });
-
+        mCircleProgressView.setVisibility(View.VISIBLE);
         mGlideImageView.diskCacheStrategy(DiskCacheStrategy.NONE).load(mPhotoUrl, R.drawable.ic_launcher_background, new OnProgressListener() {
             @Override
             public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
                 KLog.i(getClass().getSimpleName() + percentage+"===bytesRead:"+bytesRead +"==totalBytes:"+totalBytes);
+                mCircleProgressView.setProgress(percentage);
+                if (isComplete){
+                    mCircleProgressView.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

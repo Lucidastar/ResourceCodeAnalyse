@@ -7,11 +7,19 @@
    <ImageView
        android:id="@+id/iv_test"
        android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       />
 
    <com.lucidastar.glidestudy.GlideImageView
        android:id="@+id/giv_test"
        android:layout_width="match_parent"
        android:layout_height="wrap_content" />
 
+   <com.lucidastar.glidestudy.view.CircleProgressView
+       android:id="@+id/cpv_progress"
+       android:layout_width="50dp"
+       android:layout_height="50dp"
+       android:layout_gravity="center"
+       />
 </FrameLayout>
