@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EventBus.getDefault().register(this);
+
         mButton = this.findViewById(R.id.btn_send);
         mButtonAsync = this.findViewById(R.id.btn_send_async);
         mTvTest = findViewById(R.id.tv_name);
@@ -58,16 +58,25 @@ public class MainActivity extends AppCompatActivity {
         mButtonOpenFirstActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().removeAllStickyEvents();
+//                EventBus.getDefault().removeAllStickyEvents();
                 startActivity(new Intent(MainActivity.this,FirstActivity.class));
             }
         });
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
+
+    }
+
 
     //主线程
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void getUserInfoMain(UserEvent userEvent) {
 //        Log.i(TAG, "getUserInfoMain: "+"名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge()+",是否是主线程"+ (Looper.myLooper() == Looper.getMainLooper()));
         mTvTest.setText("名字：" + userEvent.getName() + "====年龄：" + userEvent.getAge());
