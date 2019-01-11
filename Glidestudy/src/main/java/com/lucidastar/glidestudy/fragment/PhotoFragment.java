@@ -95,7 +95,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
         KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
-//        Glide.with(this).load(mPhotoUrl).into(mIvTest);
+        Glide.with(this).load(mPhotoUrl).into(mIvTest);
 
 
 //        GlideImageLoader.create(mIvTest).listener(mPhotoUrl, new OnProgressListener() {

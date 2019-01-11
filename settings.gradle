@@ -1,1 +1,1 @@
-include ':EventBusStudy', ':Glidestudy'
+include ':EventBusStudy', ':Glidestudy', ':Rxjavastudy'

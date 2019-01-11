@@ -39,5 +39,5 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation externalEventBus
 }

@@ -10,8 +10,9 @@ buildscript {
 
 
     }
+    apply from: 'thirdparty-lib/config.gradle'
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath externalAndroidBuildGradlePlugin
 
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -25,8 +26,10 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-
+        flatDir { dirs 'src/main/libs' }
     }
+    apply plugin: 'idea'
+    buildDir = new File(rootDir, "gradle-build/${path.replaceAll(':', '/')}")
 }
 
 task clean(type: Delete) {
