@@ -7,9 +7,13 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
@@ -25,18 +29,24 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.internal.functions.Functions;
+import io.reactivex.internal.operators.completable.CompletableTimer;
+import io.reactivex.internal.operators.observable.ObservableZip;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.Timed;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        method1();
-        method10();
+//        method1();
+//        method10();
+        method12();
     }
 
     //简单实用
@@ -52,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 e.onComplete();//会调用完成
             }
 
-        }) ;
+        });
 
         //观察者
         Observer<Integer> observer = new Observer<Integer>() {
@@ -64,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(@NonNull Integer integer) {
-                Log.i(TAG, "onNext: "+integer);
+                Log.i(TAG, "onNext: " + integer);
             }
 
             @Override
@@ -74,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                Log.i(TAG, "onComplete: "+"完成！");
+                Log.i(TAG, "onComplete: " + "完成！");
             }
         };
 
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //map操作符的使用
-    private void method2(){
+    private void method2() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
@@ -95,18 +105,18 @@ public class MainActivity extends AppCompatActivity {
                 .map(new Function<Integer, String>() {
                     @Override
                     public String apply(@NonNull Integer integer) throws Exception {
-                        return "this is a result"+integer;
+                        return "this is a result" + integer;
                     }
                 }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
 
     //flatMap操作符的使用
-    private void method3(){
+    private void method3() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
@@ -120,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public ObservableSource<String> apply(@NonNull Integer integer) throws Exception {
                         List<String> list = new ArrayList();
-                        list.add("this is integer"+integer);
+                        list.add("this is integer" + integer);
                         for (int i = 0; i < 3; i++) {
 //                            list.add("this is integer"+integer);
                         }
@@ -129,13 +139,13 @@ public class MainActivity extends AppCompatActivity {
                 }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
 
     //zip操作符的使用
-    private void method4(){
+    private void method4() {
         Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
@@ -169,12 +179,12 @@ public class MainActivity extends AppCompatActivity {
         }).subscribeOn(Schedulers.newThread()).subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
 
-    private void method5(){
+    private void method5() {
         Observable<Integer> observable1 = Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Integer> e) throws Exception {
@@ -216,23 +226,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void method6(){
-        Observable<String> observable = Observable.fromArray(new String[]{"你好","我好"});
+    private void method6() {
+        Observable<String> observable = Observable.fromArray(new String[]{"你好", "我好"});
         observable.subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
-    private void method7(){
-        Observable<String> observable = Observable.fromArray(new String[]{"你好","我好"});
+
+    private void method7() {
+        Observable<String> observable = Observable.fromArray(new String[]{"你好", "我好"});
         final FutureTask<String> futureTask = new FutureTask<String>(new Callable<String>() {
             @Override
             public String call() throws Exception {
                 return "hello";
             }
-        }) ;
+        });
 
         Scheduler.Worker worker = Schedulers.io().createWorker();
         worker.schedule(new Runnable() {
@@ -245,23 +256,23 @@ public class MainActivity extends AppCompatActivity {
         Observable.fromFuture(futureTask).subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
 
     //Just
-    private void method8(){
-        Observable.just("hello","world").subscribe(new Consumer<String>() {
+    private void method8() {
+        Observable.just("hello", "world").subscribe(new Consumer<String>() {
             @Override
             public void accept(@NonNull String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
 
     }
 
-    private void method9(){
+    private void method9() {
         Observable.just("hello").timer(1, TimeUnit.SECONDS).timeInterval(TimeUnit.SECONDS, new Scheduler() {
             @Override
             public Worker createWorker() {
@@ -270,18 +281,162 @@ public class MainActivity extends AppCompatActivity {
         }).subscribe(new Consumer<Timed<Long>>() {
             @Override
             public void accept(@NonNull Timed<Long> longTimed) throws Exception {
-                Log.i(TAG, "accept: "+longTimed.value());
+                Log.i(TAG, "accept: " + longTimed.value());
             }
         });
     }
-    private void method10(){
-        Flowable<String> stringFlowable = Flowable.fromArray("你好","我好","他好");
+
+    private void method10() {
+        Flowable<String> stringFlowable = Flowable.fromArray("你好", "我好", "他好");
 
         stringFlowable.subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Log.i(TAG, "accept: "+s);
+                Log.i(TAG, "accept: " + s);
             }
         });
     }
+
+    private void method11() {
+        Observable.fromArray("你好", "jhon", "other")
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s) throws Exception {
+                        return "first"+s;
+                    }
+                })
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "disposable0: 当前线程" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s) throws Exception {
+                        Log.i(TAG, "apply: 当前线程" + Thread.currentThread().getName());
+                        return "是的"+s;
+                    }
+                })
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "disposable1: 当前线程" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "disposable2: 当前线程" + Thread.currentThread().getName());
+                    }
+                })
+                .mergeWith(new CompletableTimer(4000,TimeUnit.MILLISECONDS,Schedulers.io()))
+                .flatMap(new Function<String, ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> apply(String s) throws Exception {
+                Log.i(TAG, "ObservableSource: 当前线程" + Thread.currentThread().getName());
+                return Observable.just("你好"+s);
+            }
+        }).filter(new Predicate<String>() {
+            @Override
+            public boolean test(String s) throws Exception {
+                return true;
+            }
+        }).doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) throws Exception {
+                Log.i(TAG, "disposable3: 当前线程" + Thread.currentThread().getName());
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.i(TAG, "onNext: result"+s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG, "onComplete: 当前线程" + Thread.currentThread().getName());
+            }
+        });
+    }
+
+    private void method12(){
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+            }
+        }).subscribeOn(getNamedScheduler("创建后的scheduler"))
+        .doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) throws Exception {
+                threadInfo("doOnSubscribe-1");
+            }
+        })
+        .subscribeOn(getNamedScheduler("doOnSubscribe-1后的subscribeOn"))
+        .doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) throws Exception {
+                threadInfo("doOnSubscribe-2");
+            }
+        })
+        .subscribeOn(getNamedScheduler("doOnSubscribe-2后的subscribeOn"))
+        .doOnSubscribe(new Consumer<Disposable>() {
+            @Override
+            public void accept(Disposable disposable) throws Exception {
+                threadInfo("doOnSubscribe-3");
+            }
+        }).subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                threadInfo("onNext");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        ;
+    }
+
+    public static Scheduler getNamedScheduler(final String name) {
+        return Schedulers.from(Executors.newCachedThreadPool(new ThreadFactory() {
+            @Override
+            public Thread newThread(@android.support.annotation.NonNull Runnable r) {
+                return new Thread(r,name);
+            }
+        }));
+    }
+
+    public static void threadInfo(String caller) {
+        Log.i(TAG, caller + " => " + Thread.currentThread().getName());
+    }
+
 }
