@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -12,8 +15,10 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
+import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
@@ -377,10 +382,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void method12(){
+
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-
+                emitter.onNext("1");
+                emitter.onNext("2");
+                emitter.onNext("3");
+                emitter.onComplete();
             }
         }).subscribeOn(getNamedScheduler("创建后的scheduler"))
         .doOnSubscribe(new Consumer<Disposable>() {
@@ -388,7 +397,8 @@ public class MainActivity extends AppCompatActivity {
             public void accept(Disposable disposable) throws Exception {
                 threadInfo("doOnSubscribe-1");
             }
-        })
+        }).subscribeOn(getNamedScheduler("第二个测试测试"))
+                .subscribeOn(getNamedScheduler("测试测试测试"))
         .subscribeOn(getNamedScheduler("doOnSubscribe-1后的subscribeOn"))
         .doOnSubscribe(new Consumer<Disposable>() {
             @Override
@@ -405,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
         }).subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                threadInfo("doOnSubscribe-4");
             }
 
             @Override
@@ -423,7 +433,36 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        ;
+        //创建自己的Schedulers，是为了验证subscribeOn与observerOn的区别
+
+        /*doOnSubscribe-3 => main
+        doOnSubscribe-4 => main
+        doOnSubscribe-2 => doOnSubscribe-2后的subscribeOn
+        doOnSubscribe-1 => 第二个测试测试
+        onNext => 创建后的scheduler
+        onNext => 创建后的scheduler
+        onNext => 创建后的scheduler
+        */
+        //doOnSubscribe会得到下方第一个subscribeOn的值
+        //subscribeOn(事件的产生线程的切换)   observerOn（事件的消费线程的切换）
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+
+            }
+        });
+
+        Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(FlowableEmitter<String> emitter) throws Exception {
+
+            }
+        }, BackpressureStrategy.BUFFER).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+
+            }
+        });
     }
 
     public static Scheduler getNamedScheduler(final String name) {
