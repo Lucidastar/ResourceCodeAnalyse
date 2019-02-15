@@ -1,27 +1,24 @@
 package com.lucidastar.glidestudy.fragment;
 
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.lucidastar.glidestudy.GlideImageLoader;
-import com.lucidastar.glidestudy.GlideImageView;
+import com.github.chrisbanes.photoview.OnPhotoTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.lucidastar.glidestudy.R;
-import com.lucidastar.glidestudy.progress.OnProgressListener;
-import com.lucidastar.glidestudy.progress.ProgressManager;
 import com.lucidastar.glidestudy.view.CircleProgressView;
 import com.mine.lucidastarutils.log.KLog;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,9 +26,9 @@ import com.mine.lucidastarutils.log.KLog;
 public class PhotoFragment extends LazyLoadBaseFragment {
 
     private String mPhotoUrl;
-    private ImageView mIvTest;
-    private GlideImageView mGlideImageView;
+    private PhotoView mPhotoView;
     private int mPosition;
+    int i = 0;
     private CircleProgressView mCircleProgressView;
     public PhotoFragment() {
 
@@ -74,47 +71,63 @@ public class PhotoFragment extends LazyLoadBaseFragment {
 
     @Override
     protected void initView(View rootView) {
-        mIvTest = rootView.findViewById(R.id.iv_test);
-        mGlideImageView = rootView.findViewById(R.id.giv_test);
+        mPhotoView = rootView.findViewById(R.id.photo_view);
         mCircleProgressView = rootView.findViewById(R.id.cpv_progress);
+
     }
 
     @Override
     public void onFragmentResume() {
         super.onFragmentResume();
-        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户可见");
+//        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户可见");
+//        if (i >= 100){
+//            mCircleProgressView.setVisibility(View.GONE);
+//        }else {
+//            mCircleProgressView.setVisibility(View.VISIBLE);
+//        }
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                while (i < 100){
+                    try {
+                        Thread.sleep(200);
+                        i ++;
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                if (i == 99){
+//                                    mCircleProgressView.setVisibility(View.GONE);
+//                                }
+//                                mCircleProgressView.setProgress(i);
+//                            }
+//                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        },100);
+
+        initListener();
+    }
+
+    private void initListener() {
+
     }
 
     @Override
     public void onFragmentPause() {
         super.onFragmentPause();
-        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户不可见");
+//        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户不可见");
     }
 
     @Override
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
-        Glide.with(this).load(mPhotoUrl).into(mIvTest);
-
-
-//        GlideImageLoader.create(mIvTest).listener(mPhotoUrl, new OnProgressListener() {
-//            @Override
-//            public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
-//                KLog.i(getClass().getSimpleName() + percentage);
-//            }
-//        });
-        mCircleProgressView.setVisibility(View.VISIBLE);
-        mGlideImageView.diskCacheStrategy(DiskCacheStrategy.NONE).load(mPhotoUrl, R.drawable.ic_launcher_background, new OnProgressListener() {
-            @Override
-            public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
-                KLog.i(getClass().getSimpleName() + percentage+"===bytesRead:"+bytesRead +"==totalBytes:"+totalBytes);
-                mCircleProgressView.setProgress(percentage);
-                if (isComplete){
-                    mCircleProgressView.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+//        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
+        Glide.with(this).load(mPhotoUrl).into(mPhotoView);
 
     }
+
 }
