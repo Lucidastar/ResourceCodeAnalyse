@@ -37,7 +37,8 @@
             android:name=".PictureActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".PhotoViewAnalysisActivity"></activity>
     </application>
 
 </manifest>

@@ -22,6 +22,8 @@ import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
+ * https://github.com/wasabeef/glide-transformations
+ * https://github.com/VicJcc/BrowseImg/blob/master/app/build.gradle
  */
 public class PhotoFragment extends LazyLoadBaseFragment {
 
@@ -73,6 +75,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     protected void initView(View rootView) {
         mPhotoView = rootView.findViewById(R.id.photo_view);
         mCircleProgressView = rootView.findViewById(R.id.cpv_progress);
+
 
     }
 
