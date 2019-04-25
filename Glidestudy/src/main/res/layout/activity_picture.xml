@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#313130"
+    android:background="#b1b1b0"
     tools:context="com.lucidastar.glidestudy.PictureActivity">
 
-    <com.lucidastar.glidestudy.view.MoveViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/vp_pic_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

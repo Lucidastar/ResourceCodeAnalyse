@@ -11,10 +11,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.lucidastar.glidestudy.R;
 import com.lucidastar.glidestudy.view.CircleProgressView;
+import com.lucidastar.glidestudy.view.DragPhotoView;
 import com.mine.lucidastarutils.log.KLog;
 
 import java.util.Timer;
@@ -28,10 +31,11 @@ import java.util.TimerTask;
 public class PhotoFragment extends LazyLoadBaseFragment {
 
     private String mPhotoUrl;
-    private PhotoView mPhotoView;
+    private DragPhotoView mPhotoView;
     private int mPosition;
     int i = 0;
     private CircleProgressView mCircleProgressView;
+    private FrameLayout mFlContain;
     public PhotoFragment() {
 
     }
@@ -73,9 +77,9 @@ public class PhotoFragment extends LazyLoadBaseFragment {
 
     @Override
     protected void initView(View rootView) {
-        mPhotoView = rootView.findViewById(R.id.photo_view);
+//        mPhotoView = rootView.findViewById(R.id.photo_view);
         mCircleProgressView = rootView.findViewById(R.id.cpv_progress);
-
+        mFlContain = rootView.findViewById(R.id.fl_contain);
 
     }
 
@@ -129,8 +133,13 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 //        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
-        Glide.with(this).load(mPhotoUrl).into(mPhotoView);
-
+//        Glide.with(this).load(mPhotoUrl).into(mPhotoView);
+        mPhotoView = new DragPhotoView(getActivity());
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
+        mPhotoView.setLayoutParams(layoutParams);
+        mFlContain.removeAllViews();
+        mFlContain.addView(mPhotoView);
+        Glide.with(this).load(mPhotoUrl).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)).into(mPhotoView);
     }
 
 }

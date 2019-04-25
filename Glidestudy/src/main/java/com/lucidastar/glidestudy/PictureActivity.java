@@ -20,7 +20,7 @@ import java.util.List;
 
 public class PictureActivity extends AppCompatActivity {
 
-    private MoveViewPager mViewPager;
+    private ViewPager mViewPager;
     MyViewPagerAdapter mMyViewPagerAdapter;
     private TextView mTvNum;
     private FrameLayout mFlBack;
