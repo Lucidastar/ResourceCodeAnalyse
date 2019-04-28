@@ -21,7 +21,9 @@
     <FrameLayout
         android:id="@+id/fl_contain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        />
 
     <com.lucidastar.glidestudy.view.CircleProgressView
         android:id="@+id/cpv_progress"

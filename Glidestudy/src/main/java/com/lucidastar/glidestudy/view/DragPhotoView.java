@@ -55,7 +55,7 @@ public class DragPhotoView extends PhotoView {
     public DragPhotoView(Context context, AttributeSet attr, int defStyle) {
         super(context, attr, defStyle);
         mPaint = new Paint();
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(Color.parseColor("#b9b2b1"));
     }
 
     @Override
