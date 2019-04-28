@@ -27,11 +27,10 @@
             android:value="AppGlideModule"
             />
         -->
-        <!--
-            <meta-data
+
+        <!--    <meta-data
             android:name="com.lucidastar.glidestudy.progress.ProgressAppGlideModule"
-            android:value="AppGlideModule" />
-        -->
+            android:value="AppGlideModule" />-->
 
         <activity
             android:name=".PictureActivity"

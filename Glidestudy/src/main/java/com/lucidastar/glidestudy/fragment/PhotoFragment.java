@@ -3,7 +3,9 @@ package com.lucidastar.glidestudy.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
@@ -13,10 +15,16 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.bumptech.glide.request.target.Target;
 import com.lucidastar.glidestudy.R;
+import com.lucidastar.glidestudy.progress.OnProgressListener;
+import com.lucidastar.glidestudy.progress.ProgressManager;
 import com.lucidastar.glidestudy.view.CircleProgressView;
 import com.lucidastar.glidestudy.view.DragPhotoView;
 import com.mine.lucidastarutils.log.KLog;
@@ -117,16 +125,26 @@ public class PhotoFragment extends LazyLoadBaseFragment {
         super.onFragmentPause();
 //        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户不可见");
     }
-
     @Override
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
+        ProgressManager.addListener(mPhotoUrl, new OnProgressListener() {
+            @Override
+            public void onProgress(boolean isComplete, int percentage, long bytesRead, long totalBytes) {
+                KLog.i("进度"+percentage);
+                KLog.i("总共"+totalBytes);
+                mCircleProgressView.setProgress(percentage);
+                if (isComplete){
+                    mCircleProgressView.setVisibility(View.GONE);
+                }
+            }
+        });
         mPhotoView = new DragPhotoView(getActivity());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
         mPhotoView.setLayoutParams(layoutParams);
         mFlContain.removeAllViews();
         mFlContain.addView(mPhotoView);
-        Glide.with(this).load(mPhotoUrl).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)).into(mPhotoView);
+        Glide.with(this).load(mPhotoUrl).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(mPhotoView);
 
     }
 

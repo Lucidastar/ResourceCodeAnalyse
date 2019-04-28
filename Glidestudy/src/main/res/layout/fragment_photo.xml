@@ -30,7 +30,7 @@
         app:cpv_progressTextVisible="false"
         android:layout_gravity="center"
         app:cpv_progressStyle="FillInnerArc"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cpv_progressReachColor="@android:color/white"
         />
 </com.lucidastar.glidestudy.view.DraggableFrameLayout>
