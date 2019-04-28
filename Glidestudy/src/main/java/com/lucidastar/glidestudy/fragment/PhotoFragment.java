@@ -1,6 +1,8 @@
 package com.lucidastar.glidestudy.fragment;
 
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,8 +15,7 @@ import com.bumptech.glide.Glide;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
-import com.github.chrisbanes.photoview.PhotoView;
+
 import com.lucidastar.glidestudy.R;
 import com.lucidastar.glidestudy.view.CircleProgressView;
 import com.lucidastar.glidestudy.view.DragPhotoView;
@@ -36,6 +37,19 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     int i = 0;
     private CircleProgressView mCircleProgressView;
     private FrameLayout mFlContain;
+
+    int mOriginLeft;
+    int mOriginTop;
+    int mOriginHeight;
+    int mOriginWidth;
+    int mOriginCenterX;
+    int mOriginCenterY;
+    private float mTargetHeight;
+    private float mTargetWidth;
+    private float mScaleX;
+    private float mScaleY;
+    private float mTranslationX;
+    private float mTranslationY;
     public PhotoFragment() {
 
     }
@@ -86,41 +100,16 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     @Override
     public void onFragmentResume() {
         super.onFragmentResume();
-//        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户可见");
-//        if (i >= 100){
-//            mCircleProgressView.setVisibility(View.GONE);
-//        }else {
-//            mCircleProgressView.setVisibility(View.VISIBLE);
-//        }
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                while (i < 100){
-                    try {
-                        Thread.sleep(200);
-                        i ++;
-//                        getActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if (i == 99){
-//                                    mCircleProgressView.setVisibility(View.GONE);
-//                                }
-//                                mCircleProgressView.setProgress(i);
-//                            }
-//                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        },100);
-
         initListener();
     }
 
     private void initListener() {
+        mPhotoView.setOnExitListener(new DragPhotoView.OnExitListener() {
+            @Override
+            public void onExit(DragPhotoView view, float translateX, float translateY, float w, float h) {
 
+            }
+        });
     }
 
     @Override
@@ -132,14 +121,112 @@ public class PhotoFragment extends LazyLoadBaseFragment {
     @Override
     public void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-//        KLog.i(getClass().getSimpleName() + "位置"+mPosition+"====  对用户第一次可见");
-//        Glide.with(this).load(mPhotoUrl).into(mPhotoView);
         mPhotoView = new DragPhotoView(getActivity());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
         mPhotoView.setLayoutParams(layoutParams);
         mFlContain.removeAllViews();
         mFlContain.addView(mPhotoView);
         Glide.with(this).load(mPhotoUrl).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.RESOURCE)).into(mPhotoView);
+
+    }
+
+    private void performExitAnimation(final DragPhotoView view, float x, float y, float w, float h) {
+        view.finishAnimationCallBack();
+        float viewX = mTargetWidth / 2 + x - mTargetWidth * mScaleX / 2;
+        float viewY = mTargetHeight / 2 + y - mTargetHeight * mScaleY / 2;
+        view.setX(viewX);
+        view.setY(viewY);
+
+        float centerX = view.getX() + mOriginWidth / 2;
+        float centerY = view.getY() + mOriginHeight / 2;
+
+        float translateX = mOriginCenterX - centerX;
+        float translateY = mOriginCenterY - centerY;
+
+
+        ValueAnimator translateXAnimator = ValueAnimator.ofFloat(view.getX(), view.getX() + translateX);
+        translateXAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                view.setX((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        translateXAnimator.setDuration(300);
+        translateXAnimator.start();
+        ValueAnimator translateYAnimator = ValueAnimator.ofFloat(view.getY(), view.getY() + translateY);
+        translateYAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                view.setY((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        translateYAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                animator.removeAllListeners();
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        translateYAnimator.setDuration(300);
+        translateYAnimator.start();
+    }
+
+    private void performEnterAnimation(final DragPhotoView photoView) {
+//        final DragPhotoView photoView = mPhotoViews[0];
+        ValueAnimator translateXAnimator = ValueAnimator.ofFloat(photoView.getX(), 0);
+        translateXAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                photoView.setX((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        translateXAnimator.setDuration(300);
+        translateXAnimator.start();
+
+        ValueAnimator translateYAnimator = ValueAnimator.ofFloat(photoView.getY(), 0);
+        translateYAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                photoView.setY((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        translateYAnimator.setDuration(300);
+        translateYAnimator.start();
+
+        ValueAnimator scaleYAnimator = ValueAnimator.ofFloat(mScaleY, 1);
+        scaleYAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                photoView.setScaleY((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        scaleYAnimator.setDuration(300);
+        scaleYAnimator.start();
+
+        ValueAnimator scaleXAnimator = ValueAnimator.ofFloat(mScaleX, 1);
+        scaleXAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                photoView.setScaleX((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        scaleXAnimator.setDuration(300);
+        scaleXAnimator.start();
     }
 
 }

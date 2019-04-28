@@ -9,12 +9,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.github.chrisbanes.photoview.OnOutsidePhotoTapListener;
-import com.github.chrisbanes.photoview.OnPhotoTapListener;
-import com.github.chrisbanes.photoview.OnScaleChangedListener;
-import com.github.chrisbanes.photoview.OnSingleFlingListener;
-import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
+
+import com.lucidastar.glidestudy.photoview.OnOutsidePhotoTapListener;
+import com.lucidastar.glidestudy.photoview.OnPhotoTapListener;
+import com.lucidastar.glidestudy.photoview.OnScaleChangedListener;
+import com.lucidastar.glidestudy.photoview.OnSingleFlingListener;
+import com.lucidastar.glidestudy.photoview.PhotoView;
 import com.mine.lucidastarutils.log.KLog;
 
 public class PhotoViewAnalysisActivity extends AppCompatActivity implements OnPhotoTapListener, View.OnClickListener, View.OnLongClickListener, OnOutsidePhotoTapListener, OnScaleChangedListener, OnSingleFlingListener {

@@ -9,7 +9,7 @@
     android:layout_gravity="center"
     tools:context="com.lucidastar.glidestudy.PhotoViewAnalysisActivity">
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <com.lucidastar.glidestudy.photoview.PhotoView
         android:id="@+id/pv_analysis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

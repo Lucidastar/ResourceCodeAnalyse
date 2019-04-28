@@ -9,7 +9,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.github.chrisbanes.photoview.PhotoView;
+import com.lucidastar.glidestudy.photoview.PhotoView;
 
 /**
  * Created by qiuyouzone on 2019/4/25.
