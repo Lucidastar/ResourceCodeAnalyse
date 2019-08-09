@@ -1,6 +1,7 @@
 package com.lucidastar.rxjavastudy;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -31,11 +32,13 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.internal.functions.Functions;
+import io.reactivex.internal.operators.completable.CompletableDelay;
 import io.reactivex.internal.operators.completable.CompletableTimer;
 import io.reactivex.internal.operators.observable.ObservableZip;
 import io.reactivex.schedulers.Schedulers;
@@ -43,7 +46,7 @@ import io.reactivex.schedulers.Timed;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "mine";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        method1();
 //        method10();
-        method12();
+        method14();
     }
 
     //简单实用
@@ -308,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String s) throws Exception {
-                        return "first"+s;
+                        return "first" + s;
                     }
                 })
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -322,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public String apply(String s) throws Exception {
                         Log.i(TAG, "apply: 当前线程" + Thread.currentThread().getName());
-                        return "是的"+s;
+                        return "是的" + s;
                     }
                 })
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -338,14 +341,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "disposable2: 当前线程" + Thread.currentThread().getName());
                     }
                 })
-                .mergeWith(new CompletableTimer(4000,TimeUnit.MILLISECONDS,Schedulers.io()))
+                .mergeWith(new CompletableTimer(4000, TimeUnit.MILLISECONDS, Schedulers.io()))
                 .flatMap(new Function<String, ObservableSource<String>>() {
-            @Override
-            public ObservableSource<String> apply(String s) throws Exception {
-                Log.i(TAG, "ObservableSource: 当前线程" + Thread.currentThread().getName());
-                return Observable.just("你好"+s);
-            }
-        }).filter(new Predicate<String>() {
+                    @Override
+                    public ObservableSource<String> apply(String s) throws Exception {
+                        Log.i(TAG, "ObservableSource: 当前线程" + Thread.currentThread().getName());
+                        return Observable.just("你好" + s);
+                    }
+                }).filter(new Predicate<String>() {
             @Override
             public boolean test(String s) throws Exception {
                 return true;
@@ -359,29 +362,29 @@ public class MainActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
                 .subscribe(new Observer<String>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(String s) {
-                Log.i(TAG, "onNext: result"+s);
-            }
+                    @Override
+                    public void onNext(String s) {
+                        Log.i(TAG, "onNext: result" + s);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
-                Log.i(TAG, "onComplete: 当前线程" + Thread.currentThread().getName());
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        Log.i(TAG, "onComplete: 当前线程" + Thread.currentThread().getName());
+                    }
+                });
     }
 
-    private void method12(){
+    private void method12() {
 
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -392,27 +395,27 @@ public class MainActivity extends AppCompatActivity {
                 emitter.onComplete();
             }
         }).subscribeOn(getNamedScheduler("创建后的scheduler"))
-        .doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) throws Exception {
-                threadInfo("doOnSubscribe-1");
-            }
-        }).subscribeOn(getNamedScheduler("第二个测试测试"))
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        threadInfo("doOnSubscribe-1");
+                    }
+                }).subscribeOn(getNamedScheduler("第二个测试测试"))
                 .subscribeOn(getNamedScheduler("测试测试测试"))
-        .subscribeOn(getNamedScheduler("doOnSubscribe-1后的subscribeOn"))
-        .doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) throws Exception {
-                threadInfo("doOnSubscribe-2");
-            }
-        })
-        .subscribeOn(getNamedScheduler("doOnSubscribe-2后的subscribeOn"))
-        .doOnSubscribe(new Consumer<Disposable>() {
-            @Override
-            public void accept(Disposable disposable) throws Exception {
-                threadInfo("doOnSubscribe-3");
-            }
-        }).subscribe(new Observer<String>() {
+                .subscribeOn(getNamedScheduler("doOnSubscribe-1后的subscribeOn"))
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        threadInfo("doOnSubscribe-2");
+                    }
+                })
+                .subscribeOn(getNamedScheduler("doOnSubscribe-2后的subscribeOn"))
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        threadInfo("doOnSubscribe-3");
+                    }
+                }).subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
                 threadInfo("doOnSubscribe-4");
@@ -469,13 +472,159 @@ public class MainActivity extends AppCompatActivity {
         return Schedulers.from(Executors.newCachedThreadPool(new ThreadFactory() {
             @Override
             public Thread newThread(@android.support.annotation.NonNull Runnable r) {
-                return new Thread(r,name);
+                return new Thread(r, name);
             }
         }));
     }
 
     public static void threadInfo(String caller) {
         Log.i(TAG, caller + " => " + Thread.currentThread().getName());
+    }
+
+    private void method13() {
+        Observable
+                .create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+                        Log.d("wyz", "create:" + Thread.currentThread().getName());
+                        e.onNext(1);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .map(new Function<Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer) throws Exception {
+                        Log.d("wyz", "map1:" + Thread.currentThread().getName());
+                        return integer;
+                    }
+                })
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.d("wyz", "doOnSubscribe1:" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.d("wyz", "doOnSubscribe2:" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .map(new Function<Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer integer) throws Exception {
+                        Log.d("wyz", "doOnSubscribe2:" + Thread.currentThread().getName());
+                        return integer;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<Integer, ObservableSource<Integer>>() {
+                    @Override
+                    public ObservableSource<Integer> apply(Integer integer) throws Exception {
+                        Log.d("wyz", "flatMap:" + Thread.currentThread().getName());
+                        return Observable.fromArray(integer);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer value) {
+                        Log.d("wyz", "执行完毕:" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    private void method14() {
+        //https://blog.csdn.net/wenyingzhi/article/details/80453464  如何使用subscribeOn ObserveOn及他们之间了解
+        Disposable disposable = Observable.just("hello", "world")
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+//                      Log.i(TAG, "accept: "+s);
+                    }
+                });
+
+//        disposable.dispose();
+
+
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext("hello");
+                emitter.onNext("world");
+                emitter.onNext("nihao");
+                emitter.onNext("douhao");
+            }
+        }).doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "doOnSubscribe1=" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "doOnSubscribe2=" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        Log.i(TAG, "doOnSubscribe3=" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.i(TAG, "doOnNext=" + Thread.currentThread().getName());
+                    }
+                })
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+//                        Log.i(TAG, "accept: " + s);
+//                        Log.i(TAG, "onNext: " + (Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
     }
 
 }
