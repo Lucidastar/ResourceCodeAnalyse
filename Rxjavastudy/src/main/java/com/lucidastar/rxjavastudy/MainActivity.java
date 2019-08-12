@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.mine.lucidastarutils.log.KLog;
+
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -26,7 +28,9 @@ import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableOperator;
 import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -569,10 +573,16 @@ public class MainActivity extends AppCompatActivity {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                Log.i(TAG, "begin=" + Thread.currentThread().getName());
+
                 emitter.onNext("hello");
+                Thread.sleep(10000);
                 emitter.onNext("world");
+                Thread.sleep(10000);
                 emitter.onNext("nihao");
+                Thread.sleep(10000);
                 emitter.onNext("douhao");
+//                emitter.onComplete();
             }
         }).doOnSubscribe(new Consumer<Disposable>() {
                     @Override
@@ -580,25 +590,41 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "doOnSubscribe1=" + Thread.currentThread().getName());
                     }
                 })
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+//                .subscribeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         Log.i(TAG, "doOnSubscribe2=" + Thread.currentThread().getName());
                     }
                 })
-                .subscribeOn(Schedulers.io())
+//                .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         Log.i(TAG, "doOnSubscribe3=" + Thread.currentThread().getName());
                     }
                 })
-                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
                         Log.i(TAG, "doOnNext=" + Thread.currentThread().getName());
+//                        Log.i(TAG, "doOnNext=" + s);
+//                        s = "this is new";
+                    }
+                })
+                .observeOn(Schedulers.newThread())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s) throws Exception {
+                        Thread.sleep(5000);
+                        Log.i(TAG, "map=" + Thread.currentThread().getName());
+                        if (s.equals("hello")){
+                            return "好的";
+                        }
+                        return s;
                     }
                 })
                 .subscribe(new Observer<String>() {
@@ -609,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(String s) {
-//                        Log.i(TAG, "accept: " + s);
+                        Log.i(TAG, "accept: " + s);
 //                        Log.i(TAG, "onNext: " + (Looper.myLooper() == Looper.getMainLooper()));
                     }
 
@@ -624,7 +650,33 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+        Observable<String> observable = Observable.just("ok").subscribeOn(Schedulers.io());
+        Observable<String> observable1 = Observable.just("other");
 
+        Observable<String> observable2 = Observable.concatArray(observable,observable1);
+        observable2.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.i(TAG, "ssss: " + s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
+
 
 }
