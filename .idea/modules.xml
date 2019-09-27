@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/EventBusStudy/EventBusStudy.iml" filepath="$PROJECT_DIR$/EventBusStudy/EventBusStudy.iml" />
       <module fileurl="file://$PROJECT_DIR$/Glidestudy/Glidestudy.iml" filepath="$PROJECT_DIR$/Glidestudy/Glidestudy.iml" />
       <module fileurl="file://$PROJECT_DIR$/ResourceCodeAnalyse.iml" filepath="$PROJECT_DIR$/ResourceCodeAnalyse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RxLifecycleAndAndroidStudy/RxLifecycleAndAndroidStudy.iml" filepath="$PROJECT_DIR$/RxLifecycleAndAndroidStudy/RxLifecycleAndAndroidStudy.iml" />
       <module fileurl="file://$PROJECT_DIR$/Rxjavastudy/Rxjavastudy.iml" filepath="$PROJECT_DIR$/Rxjavastudy/Rxjavastudy.iml" />
     </modules>
   </component>

@@ -37,6 +37,15 @@ ext {
     externalUtdid = 'com.taobao.android:utdid4all:1.1.5@jar'
     externalTbest  = 'com.taobao.android:tbrest:1.0.0.23@aar'
     externalLucidaUtils = 'com.github.Lucidastar:AndroidCommUtils:v1.0'
+
+    externalRxJava2 = "io.reactivex.rxjava2:rxjava:2.2.12"
+    externalRxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
+
+    externalRxLifecycle = 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
+    externalRxLifecycleAndroid = 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2'
+    externalRxLifecycleComponents = 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'
+
+
     //SDK Layer
 
 
