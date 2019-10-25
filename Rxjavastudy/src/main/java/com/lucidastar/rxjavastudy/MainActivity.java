@@ -1,5 +1,6 @@
 package com.lucidastar.rxjavastudy;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        method1();
 //        method10();
-        method14();
+//        method14();
+        method15();
     }
 
     //简单实用
@@ -674,6 +676,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete() {
 
+            }
+        });
+    }
+
+    @SuppressLint("CheckResult")
+    private void method15() {
+        Observable.combineLatest(Observable.just("hello"), Observable.just("world"), new BiFunction<String, String, Boolean>() {
+            @Override
+            public Boolean apply(String s, String s2) throws Exception {
+                return s.contains("o") && s2.contains("o");
+            }
+        }).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                Log.i(TAG, "ssss: " + aBoolean);
             }
         });
     }
