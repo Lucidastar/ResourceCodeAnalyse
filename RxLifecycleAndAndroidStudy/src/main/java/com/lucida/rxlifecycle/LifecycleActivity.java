@@ -41,6 +41,7 @@ public class LifecycleActivity extends RxAppCompatActivity {
                     }
                 });
 
+
     }
 
     @SuppressLint("CheckResult")

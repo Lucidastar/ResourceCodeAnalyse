@@ -2,14 +2,8 @@ package com.lucidastar.rxjavastudy;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import com.mine.lucidastarutils.log.KLog;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,32 +14,23 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.Emitter;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableOperator;
 import io.reactivex.ObservableSource;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import io.reactivex.internal.functions.Functions;
-import io.reactivex.internal.operators.completable.CompletableDelay;
 import io.reactivex.internal.operators.completable.CompletableTimer;
-import io.reactivex.internal.operators.observable.ObservableZip;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.Timed;
 
@@ -60,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //        method1();
 //        method10();
 //        method14();
-        method15();
+        methodCombineLatest();
     }
 
     //简单实用
@@ -679,9 +664,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    //combineLatest 操作符的使用
     @SuppressLint("CheckResult")
-    private void method15() {
+    private void methodCombineLatest() {
         Observable.combineLatest(Observable.just("hello"), Observable.just("world"), new BiFunction<String, String, Boolean>() {
             @Override
             public Boolean apply(String s, String s2) throws Exception {
