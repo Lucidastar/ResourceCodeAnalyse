@@ -148,6 +148,7 @@ public class PhotoFragment extends LazyLoadBaseFragment {
         mFlContain.addView(mPhotoView);
         Glide.with(this).load(mPhotoUrl).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(mPhotoView);
 
+        Glide.getPhotoCacheDir(getActivity());
     }
 
     private void performExitAnimation(final DragPhotoView view, float x, float y, float w, float h) {

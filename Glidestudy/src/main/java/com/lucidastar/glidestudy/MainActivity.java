@@ -22,4 +22,8 @@ public class MainActivity extends AppCompatActivity {
     public void getPhotoActivity(View view) {
         startActivity(new Intent(this,PhotoViewAnalysisActivity.class));
     }
+
+    public void getNoUIFragmentLifecycle(View view) {
+        startActivity(new Intent(this,LifecycleCheckActivity.class));
+    }
 }

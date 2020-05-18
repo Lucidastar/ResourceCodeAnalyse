@@ -20,4 +20,10 @@
         android:onClick="getPhotoActivity"
         android:text="分析PhotoView"
         android:textAllCaps="false" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="getNoUIFragmentLifecycle"
+        android:text="验证无UI的fragment的生命周期"
+        android:textAllCaps="false" />
 </LinearLayout>

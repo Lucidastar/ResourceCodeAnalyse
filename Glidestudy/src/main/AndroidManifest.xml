@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".LifecycleCheckActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,17 +28,17 @@
             android:value="AppGlideModule"
             />
         -->
-
-        <!--    <meta-data
+        <!--
+    <meta-data
             android:name="com.lucidastar.glidestudy.progress.ProgressAppGlideModule"
-            android:value="AppGlideModule" />-->
-
+            android:value="AppGlideModule" />
+        -->
         <activity
             android:name=".PictureActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity android:name=".PhotoViewAnalysisActivity"></activity>
+        <activity android:name=".PhotoViewAnalysisActivity" />
     </application>
 
 </manifest>
